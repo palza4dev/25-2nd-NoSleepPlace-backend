@@ -3,40 +3,52 @@ from datetime             import datetime, timedelta
 
 from django.http.response import JsonResponse
 from django.views         import View
+from django.db.models     import Q
 
 from places.models        import Place
 from books.models         import Book, BookStatus
 from users.utils          import login_required
 
+
 class PlaceListView(View):    
     def get(self, request):
-        try:
-            filter_prefixes = {
-                'menu'     : 'category__menu_id__in',
-                'category' : 'category_id__in'
-            }
+        try: 
+            menu     = request.GET.get('menu', None)
+            category = request.GET.get('category', None)
+            keyword  = request.GET.get('keyword', None)
+            order    = request.GET.get('order', 'id')
+        
+            q=Q()
             
-            filter_set = {filter_prefixes.get(key) : value for (key, value) in dict(request.GET).items()}
+            if menu:
+                q &= Q(category__menu__id = menu)
+            
+            if category:
+                q &= Q(category__id = category)
+                
+            if keyword:
+                q &= Q(name__contains=keyword)
+            
+            places = Place.objects.filter(q).order_by(order)
 
-            places = Place.objects.filter(**filter_set)
-            
             result = [{
                 'id'        : place.id,
                 'place_name': place.name,
-                'category'  : place.category.name,
                 'price'     : place.price,
                 'capacity'  : place.capacity,
                 'city'      : place.city.name,
                 'parking'   : place.parking,
                 'url'       : [image.url for image in place.image_set.all()],
-                } for place in places] 
+                } for place in places]
             
             return JsonResponse({'result' : result}, status=200)
         
         except Place.DoesNotExist:
             return JsonResponse({'message' : 'DOES_NOT_FOUND'}, status=400)
+        
         except TypeError:
             return JsonResponse({'message' : 'TYPE_ERROR'}, status=400)
+        
         except ValueError:
             return JsonResponse({'message' : 'VALUE_ERROR'}, status=400)
 
@@ -59,7 +71,7 @@ class PlaceDetailView(View):
                 'parking'       : place.parking,
                 'url'           : [image.url for image in place.image_set.all()],
                 'location_info' : place.location_info
-            } 
+            }
             return JsonResponse({'result' : result}, status=200)
         
         except Place.DoesNotExist:
