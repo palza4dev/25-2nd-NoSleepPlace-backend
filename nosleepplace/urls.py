@@ -18,4 +18,5 @@ from django.urls import path,include
 urlpatterns = [
     path('places', include('places.urls')),
     path('users', include('users.urls')),
+    path('books', include("books.urls"))
 ]
