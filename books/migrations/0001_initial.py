@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('total_price', models.IntegerField()),
                 ('content_type', models.CharField(max_length=50)),
                 ('content_info', models.TextField()),
-                ('status_code', models.IntegerField()),
+                ('status_code', models.ForeignKey('BookStatus', on_delete=models.CASCADE)),
                 ('place', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='places.place')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
@@ -42,7 +42,6 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('status', models.CharField(max_length=50)),
-                ('book', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='books.book')),
             ],
             options={
                 'db_table': 'book_statuses',

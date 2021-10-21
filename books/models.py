@@ -14,13 +14,12 @@ class Book(TimeStampedModel):
     total_price  = models.IntegerField()
     content_type = models.CharField(max_length=50)
     content_info = models.TextField()
-    status_code  = models.IntegerField()
+    status_code  = models.ForeignKey('BookStatus', on_delete=models.CASCADE)
     
     class Meta:
         db_table = 'books'
         
 class BookStatus(TimeStampedModel):
-    book   = models.ForeignKey(Book, on_delete=models.CASCADE)
     status = models.CharField(max_length=50)
     
     class Meta:
