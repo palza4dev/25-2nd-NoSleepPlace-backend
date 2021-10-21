@@ -16,6 +16,10 @@ Including another URLconf
 from django.urls import path,include
 
 urlpatterns = [
+<<<<<<< HEAD
     path('places', include('places.urls')),
     path('users', include('users.urls')),
+=======
+    path('places', include('places.urls'))
+>>>>>>> 5bf3007... Add : 장소데이터조회 기능구현 및 유닛테스트 완료
 ]
