@@ -13,7 +13,7 @@ class PlaceListView(View):
                 'category' : 'category_id__in'
             }
             
-            filter_set = {filter_prefixes.get(key) : value[0] for (key, value) in dict(request.GET).items()}
+            filter_set = {filter_prefixes.get(key) : value for (key, value) in dict(request.GET).items()}
 
             places = Place.objects.filter(**filter_set)
             
