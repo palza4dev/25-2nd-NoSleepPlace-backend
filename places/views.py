@@ -9,8 +9,8 @@ class PlaceListView(View):
     def get(self, request):
         try:
             filter_prefixes = {
-                'menu'     : 'category__menu_id',
-                'category' : 'category_id'
+                'menu'     : 'category__menu_id__in',
+                'category' : 'category_id__in'
             }
             
             filter_set = {filter_prefixes.get(key) : value[0] for (key, value) in dict(request.GET).items()}
@@ -35,7 +35,7 @@ class PlaceListView(View):
         except TypeError:
             return JsonResponse({'message' : 'TYPE_ERROR'}, status=400)
         except ValueError:
-            return JsonResponse({'message' : 'TYPE_ERROR'}, status=400)
+            return JsonResponse({'message' : 'VALUE_ERROR'}, status=400)
 
 class PlaceDetailView(View):
     def get(self, request, place_id):
