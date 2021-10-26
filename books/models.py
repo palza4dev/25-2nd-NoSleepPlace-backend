@@ -20,6 +20,13 @@ class Book(TimeStampedModel):
         db_table = 'books'
         
 class BookStatus(TimeStampedModel):
+    
+    class Status(models.IntegerChoices):
+        PENDING   = 1
+        CONFIRMED = 2
+        COMPLETED = 3
+        CANCELLED = 4
+
     status = models.CharField(max_length=50)
     
     class Meta:
