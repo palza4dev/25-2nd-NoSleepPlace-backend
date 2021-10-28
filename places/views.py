@@ -34,6 +34,7 @@ class PlaceListView(View):
             result = [{
                 'id'        : place.id,
                 'place_name': place.name,
+                'category'  : place.category.name,
                 'price'     : place.price,
                 'capacity'  : place.capacity,
                 'city'      : place.city.name,
