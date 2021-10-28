@@ -60,3 +60,40 @@ class KakaoSignUpTest(TestCase):
         response             = client.post("/users/account/kakao", **headers)
         
         self.assertEqual(response.status_code, 400)
+
+class UserProfileTest(TestCase):
+    def setUp(self):
+        user = User.objects.create(
+            id            = 1,
+            nickname      = '테스트 닉네임',
+            profile_image = 'http://k.kakaocdn.net/dn/img_110x110.jpg',
+            email         = 'test123@sample.com',
+            age_range     = '30~39'
+        )
+        self.access_token = jwt.encode({'id':user.id}, SECRET_KEY, algorithm='HS256')
+    
+    def tearDown(self):
+        User.objects.all().delete()
+
+    def test_user_profile_get_success(self):
+        client   = Client()
+        headers  = {'HTTP_Authorization': self.access_token}
+        response = client.get('/users/profile', content_type='application/json', **headers)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'result' : {
+                'nickname'      : '테스트 닉네임',
+                'profile_image' : 'http://k.kakaocdn.net/dn/img_110x110.jpg',
+                'email'         : 'test123@sample.com',
+                'age_range'     : '30~39'
+            }
+        })
+
+    def test_user_profile_get_invalid_token_fail(self):
+        client   = Client()
+        headers  = {'HTTP_Authorization': 'Wrong Token'}
+        response = client.get('/users/profile', content_type='application/json', **headers)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'MESSAGE':'INVALID_TOKEN'})
