@@ -6,6 +6,7 @@ from django.views          import View
 from nosleepplace.settings import SECRET_KEY
 from users.models          import User
 from users.kakao           import KakaoAPI
+from users.utils           import login_required
 
 class KakaoSignUpView(View):
     def post(self, request):
@@ -34,3 +35,20 @@ class KakaoSignUpView(View):
             return JsonResponse({'message':"KEY_ERROR"}, status=400)
         except ValueError:
              return JsonResponse({'message':"VALUE_ERROR"}, status=400)
+
+class UserProfileView(View):
+    @login_required
+    def get(self, request):
+        try:
+            user = User.objects.get(id=request.user.id)
+            
+            result = {
+                'nickname'      : user.nickname,
+                'profile_image' : user.profile_image,
+                'email'         : user.email,
+                'age_range'     : user.age_range
+            }
+            return JsonResponse({'result':result}, status=200)
+
+        except User.DoesNotExist:
+            return JsonResponse({'message':"USER_DOES_NOT_EXIST"}, status=404)
