@@ -37,7 +37,7 @@
 
 
 
-문승준
+**문승준** [[블로그 후기 링크](https://velog.io/@palza4dev/NoSleepPlace-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-4-2%EC%B0%A8-%ED%8C%80-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%B5%9C%EC%A2%85-%ED%9B%84%EA%B8%B0)]
 
 - 카카오 API을 활용해 소셜 회원가입 및 로그인 기능
 - JWT를 사용한 인증&인가와 회원 프로필 조회 기능
